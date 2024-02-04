@@ -7,6 +7,7 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework//Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
@@ -114,10 +115,13 @@ void ASTUBaseCharacter::OnDeath()
     UE_LOG(BaseCharacterLog, Display, TEXT("Actor %s is Dead"), *GetName());
 
     PlayAnimMontage(DeathAnimMotnage);
-
     GetCharacterMovement()->DisableMovement();
-
     SetLifeSpan(5.0f);
+
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
 }
 
 void ASTUBaseCharacter::OnHealthChanged(float Health)

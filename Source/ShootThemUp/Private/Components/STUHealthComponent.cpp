@@ -29,7 +29,8 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor *DamagedActor, float Damage, co
                                           class AController *InstigatedBy, AActor *DamageCauser)
 {
 
-    if (Damage <= 0.0f || IsDead()) return;
+    if (Damage <= 0.0f || IsDead())
+        return;
 
     Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
     OnHeathChanged.Broadcast(Health);
@@ -38,5 +39,4 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor *DamagedActor, float Damage, co
     {
         OnDeath.Broadcast();
     }
-    
 }
