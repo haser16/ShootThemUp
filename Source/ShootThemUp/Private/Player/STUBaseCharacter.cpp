@@ -116,7 +116,7 @@ void ASTUBaseCharacter::OnDeath()
 
     PlayAnimMontage(DeathAnimMotnage);
     GetCharacterMovement()->DisableMovement();
-    SetLifeSpan(5.0f);
+    SetLifeSpan(2.0f);
 
     if (Controller)
     {
