@@ -79,5 +79,4 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     void OnGroundLanded(const FHitResult &Hit);
 
     void SpawnWeapon();
-
 };

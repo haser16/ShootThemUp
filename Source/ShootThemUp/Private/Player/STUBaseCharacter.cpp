@@ -6,10 +6,9 @@
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework//Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "GameFramework//Controller.h"
 #include "Weapon/STUBaseWeapon.h"
-#include "GameFramework//Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
@@ -25,6 +24,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer &ObjInit)
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponet");
     SpringArmComponent->SetupAttachment(GetRootComponent());
     SpringArmComponent->bUsePawnControlRotation = true;
+    SpringArmComponent->SocketOffset = FVector(0.0f, 100.0f, 80.0f);
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
@@ -33,6 +33,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer &ObjInit)
 
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
     HealthTextComponent->SetupAttachment(GetRootComponent());
+    HealthTextComponent->SetOwnerNoSee(true);
 }
 
 // Called when the game starts or when spawned
@@ -137,8 +138,9 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)
 {
     const auto FallVelocityZ = -GetVelocity().Z;
     UE_LOG(BaseCharacterLog, Display, TEXT("On Landed %f"), FallVelocityZ);
-    
-    if (FallVelocityZ < LandedDamageVelocity.X) return;
+
+    if (FallVelocityZ < LandedDamageVelocity.X)
+        return;
 
     const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
     TakeDamage(FinalDamage, FDamageEvent(), nullptr, nullptr);
@@ -146,7 +148,8 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)
 
 void ASTUBaseCharacter::SpawnWeapon()
 {
-    if (!GetWorld()) return;
+    if (!GetWorld())
+        return;
 
     const auto Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass);
     if (Weapon)

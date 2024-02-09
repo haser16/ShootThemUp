@@ -8,6 +8,7 @@
 
 class USceletalMeshComponent;
 
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
@@ -21,5 +22,4 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     USkeletalMeshComponent *WeaponMesh;
 
     virtual void BeginPlay() override;
-
 };
