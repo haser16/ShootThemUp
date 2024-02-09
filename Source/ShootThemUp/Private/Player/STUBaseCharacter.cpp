@@ -7,6 +7,11 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+<<<<<<< Updated upstream
+=======
+#include "GameFramework//Controller.h"
+#include "Weapon/STUBaseWeapon.h"
+>>>>>>> Stashed changes
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
@@ -39,6 +44,18 @@ void ASTUBaseCharacter::BeginPlay()
 
     check(HealthComponent);
     check(HealthTextComponent);
+<<<<<<< Updated upstream
+=======
+    check(GetCharacterMovement());
+
+    OnHealthChanged(HealthComponent->GetHealth());
+    HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+    HealthComponent->OnHeathChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
+
+    LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
+
+    SpawnWeapon();
+>>>>>>> Stashed changes
 }
 
 // Called every frame
@@ -108,3 +125,48 @@ float ASTUBaseCharacter::GetMovementDirection() const
     const auto Degrees = FMath::RadiansToDegrees(AngleBetween);
     return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
+<<<<<<< Updated upstream
+=======
+
+void ASTUBaseCharacter::OnDeath()
+{
+    UE_LOG(BaseCharacterLog, Display, TEXT("Actor %s is Dead"), *GetName());
+
+    PlayAnimMontage(DeathAnimMotnage);
+    GetCharacterMovement()->DisableMovement();
+    SetLifeSpan(2.0f);
+
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
+}
+
+void ASTUBaseCharacter::OnHealthChanged(float Health)
+{
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)
+{
+    const auto FallVelocityZ = -GetVelocity().Z;
+    UE_LOG(BaseCharacterLog, Display, TEXT("On Landed %f"), FallVelocityZ);
+    
+    if (FallVelocityZ < LandedDamageVelocity.X) return;
+
+    const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+    TakeDamage(FinalDamage, FDamageEvent(), nullptr, nullptr);
+}
+
+void ASTUBaseCharacter::SpawnWeapon()
+{
+    if (!GetWorld()) return;
+
+    const auto Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass);
+    if (Weapon)
+    {
+        FAttachmentTransformRules AttacmentRules();
+        Weapon->AttachToComponent(GetMesh(), AttacmentRules, "WeaponSocket");
+    }
+}
+>>>>>>> Stashed changes
