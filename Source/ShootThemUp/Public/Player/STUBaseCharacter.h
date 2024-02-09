@@ -34,8 +34,11 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
     UTextRenderComponent *HealthTextComponent;
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     UAnimMontage *DeathAnimMotnage;
 
@@ -45,10 +48,13 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     UPROPERTY(EditDefaultsOnly, Category = "Movement")
     FVector2D LandedDamage = FVector2D(10.f, 100.0f);
 
+<<<<<<< HEAD
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     TSubclassOf<ASTUBaseWeapon> WeaponClass;
 
 >>>>>>> Stashed changes
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
@@ -74,15 +80,21 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 
     void OnStartRunning();
     void OnStopRunning();
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
 
     void OnDeath();
     void OnHealthChanged(float Health);
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult &Hit);
+<<<<<<< HEAD
 
     void SpawnWeapon();
 >>>>>>> Stashed changes
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
 };

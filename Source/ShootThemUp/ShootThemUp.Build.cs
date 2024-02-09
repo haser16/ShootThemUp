@@ -12,6 +12,7 @@ public class ShootThemUp : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 		PublicIncludePaths.AddRange(new string[] { "ShootThemUp/Public/Player", "ShootThemUp/Public/Components" });
 =======
@@ -22,6 +23,9 @@ public class ShootThemUp : ModuleRules
             "ShootThemUp/Public/Weapon"
         });
 >>>>>>> Stashed changes
+=======
+		PublicIncludePaths.AddRange(new string[] { "ShootThemUp/Public/Player", "ShootThemUp/Public/Components", "ShootThemUp/Public/Dev" });
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

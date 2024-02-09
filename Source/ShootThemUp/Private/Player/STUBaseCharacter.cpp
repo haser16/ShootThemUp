@@ -7,11 +7,15 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 #include "GameFramework//Controller.h"
 #include "Weapon/STUBaseWeapon.h"
 >>>>>>> Stashed changes
+=======
+#include "GameFramework//Controller.h"
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
@@ -44,8 +48,11 @@ void ASTUBaseCharacter::BeginPlay()
 
     check(HealthComponent);
     check(HealthTextComponent);
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
     check(GetCharacterMovement());
 
     OnHealthChanged(HealthComponent->GetHealth());
@@ -53,20 +60,18 @@ void ASTUBaseCharacter::BeginPlay()
     HealthComponent->OnHeathChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
 
     LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
+<<<<<<< HEAD
 
     SpawnWeapon();
 >>>>>>> Stashed changes
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
 }
 
 // Called every frame
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    const auto Health = HealthComponent->GetHealth();
-    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-
-    TakeDamage(0.1f, FDamageEvent{}, Controller, this);
 }
 
 // Called to bind functionality to input
@@ -125,8 +130,11 @@ float ASTUBaseCharacter::GetMovementDirection() const
     const auto Degrees = FMath::RadiansToDegrees(AngleBetween);
     return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
 
 void ASTUBaseCharacter::OnDeath()
 {
@@ -157,6 +165,7 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)
     const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
     TakeDamage(FinalDamage, FDamageEvent(), nullptr, nullptr);
 }
+<<<<<<< HEAD
 
 void ASTUBaseCharacter::SpawnWeapon()
 {
@@ -170,3 +179,5 @@ void ASTUBaseCharacter::SpawnWeapon()
     }
 }
 >>>>>>> Stashed changes
+=======
+>>>>>>> 47f6424022ab2e3f53b72dd607ca4446750b920c
