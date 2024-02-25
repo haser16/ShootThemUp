@@ -16,7 +16,8 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
   public:
     ASTUBaseWeapon();
 
-    virtual void Fire();
+    virtual void StartFire();
+    virtual void StopFire();
 
   protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -28,7 +29,15 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
     float TraceMaxDistance = 1500.0f;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    float DamageAmount = 10.0f;
+
     virtual void BeginPlay() override;
 
     void MakeShot();
+    void MakeDamage(const FHitResult &HitResult);
+    APlayerController *GetPlayerController() const;
+
+    private:
+    FTimerHandle ShotTimerHandle;
 };
