@@ -38,6 +38,11 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     void MakeDamage(const FHitResult &HitResult);
     APlayerController *GetPlayerController() const;
 
-    private:
+    bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
+    FVector GetMuzzleWorldLocation() const;
+    bool GetTraceData(FVector &TraceStart, FVector &TraceEnd) const;
+    void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
+
+  private:
     FTimerHandle ShotTimerHandle;
 };
