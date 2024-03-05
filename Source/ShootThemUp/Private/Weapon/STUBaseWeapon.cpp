@@ -66,7 +66,7 @@ bool ASTUBaseWeapon::GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRot
 }
 FVector ASTUBaseWeapon::GetMuzzleWorldLocation() const
 {
-    return WeaponMesh->GetSocketLocation(MuzzleSocketName);
+    return WeaponMesh->GetSocketLocation(MazzleSocketName);
 }
 
 bool ASTUBaseWeapon::GetTraceData(FVector &TraceStart, FVector &TraceEnd) const
@@ -89,7 +89,6 @@ void ASTUBaseWeapon::MakeHit(FHitResult &HitResult, const FVector &TraceStart, c
     FCollisionQueryParams CollisionParams;
     CollisionParams.AddIgnoredActor(GetOwner());
 
-    FHitResult HitResult;
     GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility,
                                          CollisionParams);
 }

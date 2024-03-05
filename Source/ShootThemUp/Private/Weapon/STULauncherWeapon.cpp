@@ -12,5 +12,10 @@ void ASTULauncherWeapon::StartFire()
 
 void ASTULauncherWeapon::MakeShot()
 {
-    const FTransform SpawnTransform(FRotator::ZeroRotator, Get)
+    const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleWorldLocation());
+    auto Projectile = UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, SpawnTransform);
+    // set prjectile params
+
+    UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
+    
 }
