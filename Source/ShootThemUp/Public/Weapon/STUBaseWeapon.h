@@ -26,16 +26,13 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
     FName MazzleSocketName = "MuzzleSocket";
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     float TraceMaxDistance = 1500.0f;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-    float DamageAmount = 10.0f;
 
     virtual void BeginPlay() override;
 
     void MakeShot();
-    void MakeDamage(const FHitResult &HitResult);
     APlayerController *GetPlayerController() const;
 
     bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;

@@ -14,8 +14,11 @@ class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 
 public:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float TimeBetweenShots = 0.1f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float DamageAmount = 10.0f;
 
 
     virtual void StartFire() override;
@@ -27,4 +30,6 @@ protected:
 
 private:
     FTimerHandle ShotTimerHandle;
+
+	void MakeDamage(const FHitResult &HitResult);
 };

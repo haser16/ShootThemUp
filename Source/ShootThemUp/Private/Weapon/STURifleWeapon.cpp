@@ -1,6 +1,5 @@
 // ShootThemUp. All Rights Reserved.
 
-
 #include "Weapon/STURifleWeapon.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
@@ -53,4 +52,14 @@ void ASTURifleWeapon::MakeShot()
     {
         DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
     }
+}
+
+void ASTURifleWeapon::MakeDamage(const FHitResult &HitResult)
+{
+    const auto DamagedActor = HitResult.GetActor();
+
+    if (!DamagedActor)
+        return;
+
+    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
 }

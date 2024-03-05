@@ -44,16 +44,6 @@ APlayerController *ASTUBaseWeapon::GetPlayerController() const
     return Player->GetController<APlayerController>();
 }
 
-void ASTUBaseWeapon::MakeDamage(const FHitResult &HitResult)
-{
-    const auto DamagedActor = HitResult.GetActor();
-
-    if (!DamagedActor)
-        return;
-
-    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
-}
-
 bool ASTUBaseWeapon::GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const
 {
     const auto Controller = GetPlayerController();
