@@ -11,15 +11,14 @@ class ASTUProjectile;
 UCLASS()
 class SHOOTTHEMUP_API ASTULauncherWeapon : public ASTUBaseWeapon
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
+  public:
     virtual void StartFire() override;
 
-protected:
+  protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     TSubclassOf<ASTUProjectile> ProjectileClass;
 
     virtual void MakeShot();
-	
 };
