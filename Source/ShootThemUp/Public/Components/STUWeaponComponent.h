@@ -21,7 +21,6 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
     void NextWeapon();
 
   protected:
-
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     TArray<TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
 
@@ -31,19 +30,30 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     FName WeaponArmorySocketName = "ArmorySocket";
 
+    UPROPERTY(EditDefaultsOnly, Category = "Animation")
+    UAnimMontage *EquiAnimMontage;
+
     virtual void BeginPlay() override;
+    virtual void EndPlay(const EEndPlayReason::Type EEndPlayReason) override;
 
-    private:
-      UPROPERTY()
-      ASTUBaseWeapon *CurrentWeapon = nullptr;
+  private:
+    UPROPERTY()
+    ASTUBaseWeapon *CurrentWeapon = nullptr;
 
-      UPROPERTY()
-      TArray<ASTUBaseWeapon *> Weapons;
+    UPROPERTY()
+    TArray<ASTUBaseWeapon *> Weapons;
 
-      int32 CurrentWeaponIndex = 0;
+    int32 CurrentWeaponIndex = 0;
+    bool EquipAnimInProgress = false;
 
-      void SpawnWeapons();
-      void AttachWeaponToScoket(ASTUBaseWeapon *Weapon, USceneComponent *SceneComponent, const FName &SocketName);
-      void EquipWeapon(int32 WeaponIndex);
+    void SpawnWeapons();
+    void AttachWeaponToScoket(ASTUBaseWeapon *Weapon, USceneComponent *SceneComponent, const FName &SocketName);
+    void EquipWeapon(int32 WeaponIndex);
 
+    void PlayAnimMontage(UAnimMontage *Animation);
+    void InitAnimations();
+    void OnEquipFinished(USkeletalMeshComponent *MeshComponent);
+
+    bool CanFire() const;
+    bool CanEquip() const;
 };
