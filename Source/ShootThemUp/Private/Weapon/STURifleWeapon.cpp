@@ -17,7 +17,7 @@ void ASTURifleWeapon::StopFire()
 
 void ASTURifleWeapon::MakeShot()
 {
-    if (!GetWorld())
+    if (!GetWorld() || IsAmmoEmpty())
         return;
 
     const auto Controller = GetPlayerController();
@@ -52,6 +52,7 @@ void ASTURifleWeapon::MakeShot()
     {
         DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
     }
+    DecreaseAmmo();
 }
 
 void ASTURifleWeapon::MakeDamage(const FHitResult &HitResult)
