@@ -2,10 +2,14 @@
 
 #include "Components/STUWeaponComponent.h"
 #include "Animations/STUEquipFinishedAnimNotify.h"
+#include "Animations/STUReloadFinishedAnimNotify.h"
+#include "Animations/AnimUtils.h"
 #include "Player/STUBaseCharacter.h"
 #include "Weapon/STUBaseWeapon.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All);
+
+constexpr static int32 WeaponNum = 2;
 
 USTUWeaponComponent::USTUWeaponComponent()
 {
@@ -15,6 +19,8 @@ USTUWeaponComponent::USTUWeaponComponent()
 void USTUWeaponComponent::BeginPlay()
 {
     Super::BeginPlay();
+
+    checkf(WeaponData.Num() == WeaponNum, TEXT("Our character can hold only &i weapon items"), WeaponNum);
 
     CurrentWeaponIndex = 0;
     SpawnWeapons();
@@ -48,6 +54,7 @@ void USTUWeaponComponent::SpawnWeapons()
         if (!Weapon)
             continue;
 
+        Weapon->OnClipEmpty.AddUObject(this, &USTUWeaponComponent::OnEmptyClip);
         Weapon->SetOwner(Character);
         Weapons.Add(Weapon);
 
@@ -84,9 +91,11 @@ void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
     }
 
     CurrentWeapon = Weapons[WeaponIndex];
-    //CurrentReloadAnimMontage = WeaponData[WeaponIndex].ReloadAnimMontage;
-    const auto CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData &Data) //
-        { return Data.WeaponClass == CurrentWeapon->GetClass(); //
+    // CurrentReloadAnimMontage = WeaponData[WeaponIndex].ReloadAnimMontage;
+    const auto CurrentWeaponData = WeaponData.FindByPredicate(
+        [&](const FWeaponData &Data) //
+        {
+            return Data.WeaponClass == CurrentWeapon->GetClass(); //
         });
     CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
 
@@ -127,18 +136,28 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage *Animation)
 
 void USTUWeaponComponent::InitAnimations()
 {
-    if (!EquiAnimMontage)
-        return;
-
-    const auto NotifyEvents = EquiAnimMontage->Notifies;
-    for (auto NotifyEvent : NotifyEvents)
+    auto EquipFinisheddNotify = AnimUtils::FindNotifyByClass<USTUEquipFinishedAnimNotify>(EquiAnimMontage);
+    if (EquipFinisheddNotify)
     {
-        auto EquipFinisheddNotify = Cast<USTUEquipFinishedAnimNotify>(NotifyEvent.Notify);
-        if (EquipFinisheddNotify)
+        EquipFinisheddNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
+    }
+    else
+    {
+        UE_LOG(LogWeaponComponent, Warning, TEXT("Equip Anim notify is forgotten to set"));
+        checkNoEntry();
+    }
+
+    for (auto OneWeaponData : WeaponData)
+    {
+        auto ReloadFinishedNotify =
+            AnimUtils::FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
+        if (!ReloadFinishedNotify)
         {
-            EquipFinisheddNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
-            break;
+            UE_LOG(LogWeaponComponent, Warning, TEXT("Reload Anim notify is forgotten to set"));
+            checkNoEntry();
         }
+
+        ReloadFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnReloadFinished);
     }
 }
 
@@ -151,17 +170,51 @@ void USTUWeaponComponent::OnEquipFinished(USkeletalMeshComponent *MeshComponent)
     EquipAnimInProgress = false;
 }
 
+void USTUWeaponComponent::OnReloadFinished(USkeletalMeshComponent *MeshComponent)
+{
+    ACharacter *Character = Cast<ACharacter>(GetOwner());
+    if (!Character || Character->GetMesh() != MeshComponent)
+        return;
+
+    ReloadAnimInProgress = false;
+}
+
 bool USTUWeaponComponent::CanFire() const
 {
-    return CurrentWeapon && !EquipAnimInProgress;
+    return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimInProgress;
 }
 
 bool USTUWeaponComponent::CanEquip() const
 {
-    return !EquipAnimInProgress;
+    return !EquipAnimInProgress && !ReloadAnimInProgress;
+}
+
+bool USTUWeaponComponent::CanReload() const
+{
+    return CurrentWeapon            //
+           && !EquipAnimInProgress  //
+           && !ReloadAnimInProgress //
+           && CurrentWeapon->CanReload();
+        ;
 }
 
 void USTUWeaponComponent::Reload()
 {
+    ChangeClip();
+}
+
+void USTUWeaponComponent::OnEmptyClip()
+{
+    ChangeClip();
+}
+
+void USTUWeaponComponent::ChangeClip()
+{
+    if (!CanReload())
+        return;
+
+    CurrentWeapon->StopFire();
+    CurrentWeapon->ChangeClip();
+    ReloadAnimInProgress = true;
     PlayAnimMontage(CurrentReloadAnimMontage);
 }
