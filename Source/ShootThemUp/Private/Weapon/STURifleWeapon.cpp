@@ -18,7 +18,10 @@ void ASTURifleWeapon::StopFire()
 void ASTURifleWeapon::MakeShot()
 {
     if (!GetWorld() || IsAmmoEmpty())
+    {
+        StopFire();
         return;
+    }
 
     const auto Controller = GetPlayerController();
     if (!Controller)

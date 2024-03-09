@@ -47,7 +47,6 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     FAmmoData DefaultAmmo{15, 10, false};
 
-
     virtual void BeginPlay() override;
 
     void MakeShot();

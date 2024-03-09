@@ -10,26 +10,23 @@
 UCLASS()
 class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
+  public:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    float TimeBetweenShots = 0.1f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	float TimeBetweenShots = 0.1f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     float DamageAmount = 10.0f;
 
-
     virtual void StartFire() override;
-	virtual void StopFire() override;
+    virtual void StopFire() override;
 
-protected:
+  protected:
     virtual void MakeShot();
-	
 
-private:
+  private:
     FTimerHandle ShotTimerHandle;
 
-	void MakeDamage(const FHitResult &HitResult);
+    void MakeDamage(const FHitResult &HitResult);
 };

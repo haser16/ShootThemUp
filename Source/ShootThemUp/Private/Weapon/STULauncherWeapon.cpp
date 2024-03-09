@@ -12,7 +12,10 @@ void ASTULauncherWeapon::MakeShot()
 {
 
     if (!GetWorld() || IsAmmoEmpty())
+    {
+        StopFire();
         return;
+    }
 
     FVector TraceStart, TraceEnd;
     if (!GetTraceData(TraceStart, TraceEnd))
