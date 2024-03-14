@@ -22,7 +22,8 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
     void NextWeapon();
     void Reload();
 
-    bool GetWeaponUIData(FWeaponUIData &UIData) const;
+    bool GetCurrentWeaponUIData(FWeaponUIData &UIData) const;
+    bool GetCurrentWeaponAmmoData(FAmmoData &AmmoData) const;
 
   protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -41,6 +42,7 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
     virtual void EndPlay(const EEndPlayReason::Type EEndPlayReason) override;
 
   private:
+
     UPROPERTY()
     ASTUBaseWeapon *CurrentWeapon = nullptr;
 
