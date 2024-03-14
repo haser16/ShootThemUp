@@ -22,6 +22,8 @@ class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
     void NextWeapon();
     void Reload();
 
+    bool GetWeaponUIData(FWeaponUIData &UIData) const;
+
   protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     TArray<FWeaponData> WeaponData;
