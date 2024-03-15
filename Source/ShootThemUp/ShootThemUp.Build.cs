@@ -20,6 +20,7 @@ public class ShootThemUp : ModuleRules
 			"ShootThemUp/Public/Dev",
             "ShootThemUp/Public/Weapon",
             "ShootThemUp/Public/Animations",
+            "ShootThemUp/Public/Pickups",
         });
 		PublicIncludePaths.AddRange(new string[] { "ShootThemUp/Public/Player", "ShootThemUp/Public/Components", "ShootThemUp/Public/Dev" });
 
