@@ -15,6 +15,9 @@ class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent
   public:
     USTUHealthComponent();
 
+    FOnDeath OnDeath;
+    FOnHealthChanged OnHeathChanged;
+
     float GetHealth() const
     {
         return Health;
@@ -32,8 +35,8 @@ class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent
         return Health / MaxHealth;
     }
 
-    FOnDeath OnDeath;
-    FOnHealthChanged OnHeathChanged;
+    bool TryToAddHealth(float HealthAmount);
+    bool IsHealthFull() const;
 
   protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (ClampMin = "0.0", ClampMax = "1000"))
