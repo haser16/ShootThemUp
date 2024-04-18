@@ -75,12 +75,14 @@ bool ASTUBaseWeapon::GetTraceData(FVector &TraceStart, FVector &TraceEnd) const
     return true;
 }
 
-void ASTUBaseWeapon::MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd)
+void ASTUBaseWeapon::MakeHit(FHitResult &HitResult, FVector &TraceStart, FVector &TraceEnd) const
 {
     if (!GetWorld())
         return;
+
     FCollisionQueryParams CollisionParams;
     CollisionParams.AddIgnoredActor(GetOwner());
+    CollisionParams.bReturnPhysicalMaterial = true;
 
     GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility,
                                          CollisionParams);
@@ -90,7 +92,6 @@ void ASTUBaseWeapon::DecreaseAmmo()
 {
     if (CurrentAmmo.Bullets == 0)
     {
-        UE_LOG(LogBaseWeapon, Display, TEXT("Clip Is Empty"));
         return;
     }
 

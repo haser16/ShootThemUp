@@ -61,7 +61,7 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
     FVector GetMuzzleWorldLocation() const;
     bool GetTraceData(FVector &TraceStart, FVector &TraceEnd) const;
-    void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
+    void MakeHit(FHitResult &HitResult, FVector &TraceStart, FVector &TraceEnd) const;
 
     void DecreaseAmmo();
     bool IsAmmoEmpty() const;
