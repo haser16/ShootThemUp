@@ -1,12 +1,12 @@
 // ShootThemUp. All Rights Reserved.
 
 #include "STUHealthComponent.h"
-#include "GameFramework/Actor.h"
-#include "GameFramework/Pawn.h"
-#include "GameFramework/Controller.h"
-#include "Engine/World.h"
-#include "TimerManager.h"
 #include "Camera/CameraShakeBase.h"
+#include "Engine/World.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/Controller.h"
+#include "GameFramework/Pawn.h"
+#include "TimerManager.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
@@ -65,8 +65,11 @@ void USTUHealthComponent::HealUpdate()
 
 void USTUHealthComponent::SetHealth(float NewHealth)
 {
-    Health = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
-    OnHeathChanged.Broadcast(Health);
+    const auto NextHealth = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
+    const auto HealthDelta = NextHealth - Health;
+
+    Health = NextHealth;
+    OnHeathChanged.Broadcast(Health, HealthDelta);
 }
 
 bool USTUHealthComponent::TryToAddHealth(float HealthAmount)

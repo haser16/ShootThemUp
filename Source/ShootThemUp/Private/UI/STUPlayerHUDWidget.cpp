@@ -1,11 +1,28 @@
 // ShootThemUp. All Rights Reserved.
 
-
 #include "UI/STUPlayerHUDWidget.h"
-#include "Components/STUHealthComponent.h"
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "STUUtils.h"
+
+bool USTUPlayerHUDWidget::Initialize()
+{
+    const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
+    if (HealthComponent)
+    {
+        HealthComponent->OnHeathChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealhChanged);
+    }
+
+    return Super::Initialize();
+}
+
+void USTUPlayerHUDWidget::OnHealhChanged(float Health, float HealthDelta)
+{
+    if (HealthDelta < 0.0f)
+    {
+        OnTakeDamage();
+    }
+}
 
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {
