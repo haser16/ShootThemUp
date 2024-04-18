@@ -47,7 +47,7 @@ void ASTURifleWeapon::MakeShot()
     MakeHit(HitResult, TraceStart, TraceEnd);
 
     FVector TraceFXEnd = TraceEnd;
-    if (HitResult.bBlockingHit)S
+    if (HitResult.bBlockingHit)
     {
         TraceFXEnd = HitResult.ImpactPoint;
         MakeDamage(HitResult);
