@@ -1,5 +1,4 @@
 // ShootThemUp. All Rights Reserved.
-// ShootThemUp. All Rights Reserved.
 
 #pragma once
 

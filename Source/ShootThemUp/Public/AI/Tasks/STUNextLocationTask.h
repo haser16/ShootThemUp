@@ -22,4 +22,10 @@ class SHOOTTHEMUP_API USTUNextLocationTask : public UBTTaskNode
 
     UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "AI")
     FBlackboardKeySelector AimLocationKey;
+
+    UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "AI")
+    bool SelfCenter = true;
+
+    UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "AI", meta = (EditCondition = "!SelfCenter"))
+    FBlackboardKeySelector CenterActorKey;
 };
