@@ -13,9 +13,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
-ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer &ObjInit)
-    : Super(
-          ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
+    : Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
     PrimaryActorTick.bCanEverTick = true;
 
@@ -57,7 +56,7 @@ void ASTUBaseCharacter::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
+void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
     check(PlayerInputComponent);
@@ -82,16 +81,14 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent *PlayerInputCo
 
 void ASTUBaseCharacter::MoveForward(float Amount)
 {
-    if (Amount == 0.0f)
-        return;
+    if (Amount == 0.0f) return;
     IsMovingForward = Amount > 0.0f;
     AddMovementInput(GetActorForwardVector(), Amount);
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount)
 {
-    if (Amount == 0.0f)
-        return;
+    if (Amount == 0.0f) return;
     AddMovementInput(GetActorRightVector(), Amount);
 }
 
@@ -112,8 +109,7 @@ bool ASTUBaseCharacter::IsRunning() const
 
 float ASTUBaseCharacter::GetMovementDirection() const
 {
-    if (GetVelocity().IsZero())
-        return 0.0f;
+    if (GetVelocity().IsZero()) return 0.0f;
     const auto VelocityNormal = GetVelocity().GetSafeNormal();
     const auto AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
     const auto CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
@@ -145,13 +141,12 @@ void ASTUBaseCharacter::OnHealthChanged(float Health, float HealthDelta)
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
-void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)
+void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 {
     const auto FallVelocityZ = -GetVelocity().Z;
     UE_LOG(BaseCharacterLog, Display, TEXT("On Landed %f"), FallVelocityZ);
 
-    if (FallVelocityZ < LandedDamageVelocity.X)
-        return;
+    if (FallVelocityZ < LandedDamageVelocity.X) return;
 
     const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
     TakeDamage(FinalDamage, FDamageEvent(), nullptr, nullptr);
