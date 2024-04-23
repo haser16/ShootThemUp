@@ -1,6 +1,5 @@
 // ShootThemUp. All Rights Reserved.
 
-
 #include "AI/STUAIController.h"
 #include "AI/STUAICharacter.h"
 #include "Components/STUAIPerceptionComponent.h"
@@ -12,7 +11,7 @@ ASTUAIController::ASTUAIController()
     SetPerceptionComponent(*STUAIPerceptionComponent);
 }
 
-void ASTUAIController::OnPossess(APawn *InPawn)
+void ASTUAIController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
 
@@ -30,10 +29,9 @@ void ASTUAIController::Tick(float DeltaTime)
     SetFocus(AimActor);
 }
 
-AActor *ASTUAIController::GetFocusOnActor() const
+AActor* ASTUAIController::GetFocusOnActor() const
 {
-    if (!GetBlackboardComponent())
-        return nullptr;
+    if (!GetBlackboardComponent()) return nullptr;
 
     return Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(FocusOnKeyName));
 }
