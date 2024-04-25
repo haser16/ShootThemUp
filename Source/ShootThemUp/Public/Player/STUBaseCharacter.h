@@ -17,28 +17,28 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 {
     GENERATED_BODY()
 
-  public:
+public:
     // Sets default values for this character's properties
-    ASTUBaseCharacter(const FObjectInitializer &ObjInit);
+    ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
-  protected:
+protected:
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-    UCameraComponent *CameraComponent;
-
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-    USpringArmComponent *SpringArmComponent;
+    UCameraComponent* CameraComponent;
 
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-    USTUHealthComponent *HealthComponent;
+    USpringArmComponent* SpringArmComponent;
 
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-    UTextRenderComponent *HealthTextComponent;
+    USTUHealthComponent* HealthComponent;
 
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-    USTUWeaponComponent *WeaponComponent;
+    UTextRenderComponent* HealthTextComponent;
+
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+    USTUWeaponComponent* WeaponComponent;
 
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
-    UAnimMontage *DeathAnimMotnage;
+    UAnimMontage* DeathAnimMotnage;
 
     UPROPERTY(EditDefaultsOnly, Category = "Movement")
     FVector2D LandedDamageVelocity = FVector2D(900.0f, 1000.0f);
@@ -48,13 +48,14 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
+    virtual void OnDeath();
 
-  public:
+public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
     // Called to bind functionality to input
-    virtual void SetupPlayerInputComponent(class UInputComponent *PlayerInputComponent) override;
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     UFUNCTION(BlueprintCallable, Category = "Movement")
     bool IsRunning() const;
@@ -62,7 +63,7 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     UFUNCTION(BlueprintCallable, Category = "Movement")
     float GetMovementDirection() const;
 
-  private:
+private:
     bool WantsToRun = false;
     bool IsMovingForward = false;
 
@@ -72,9 +73,8 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     void OnStartRunning();
     void OnStopRunning();
 
-    void OnDeath();
     void OnHealthChanged(float Health, float HealthDelta);
 
     UFUNCTION()
-    void OnGroundLanded(const FHitResult &Hit);
+    void OnGroundLanded(const FHitResult& Hit);
 };

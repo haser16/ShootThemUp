@@ -5,17 +5,20 @@
 
 void ASTULauncherWeapon::StartFire()
 {
+    Super::StartFire();
+
     MakeShot();
 }
 
 void ASTULauncherWeapon::MakeShot()
 {
 
-    if (!GetWorld() || IsAmmoEmpty())
-    {
-        StopFire();
+    if (!GetWorld())
         return;
-    }
+
+    if (IsAmmoEmpty()) 
+        return;
+    
 
     FVector TraceStart, TraceEnd;
     if (!GetTraceData(TraceStart, TraceEnd))
@@ -35,6 +38,7 @@ void ASTULauncherWeapon::MakeShot()
         Projectile->SetOwner(GetOwner());
         Projectile->FinishSpawning(SpawnTransform);
     }
+
     DecreaseAmmo();
     SpawnMuzzleFX();
 }

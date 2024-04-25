@@ -4,8 +4,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
-#include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -51,11 +51,23 @@ APlayerController *ASTUBaseWeapon::GetPlayerController() const
 
 bool ASTUBaseWeapon::GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const
 {
-    const auto Controller = GetPlayerController();
-    if (!Controller)
-        return false;
+    const auto STUCharacter = Cast<ACharacter>(GetOwner());
+    if (!STUCharacter)
+        false;
 
-    Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+    if (STUCharacter->IsPlayerControlled())
+    {
+        const auto Controller = GetPlayerController();
+        if (!Controller)
+            return false;
+
+        Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+    }
+    else
+    {
+        ViewLocation = GetMuzzleWorldLocation();
+        ViewRotation = WeaponMesh->GetSocketRotation(MazzleSocketName);
+    }
 
     return true;
 }
@@ -182,11 +194,10 @@ bool ASTUBaseWeapon::TryToAddAmmo(int32 ClipsAmount)
 
 UNiagaraComponent *ASTUBaseWeapon::SpawnMuzzleFX()
 {
-    return UNiagaraFunctionLibrary::SpawnSystemAttached(
-        MuzzleFX,            //
-        WeaponMesh,          //
-        MazzleSocketName,    //
-        FVector::ZeroVector, //
-        FRotator::ZeroRotator, //
-        EAttachLocation::SnapToTarget, true);
+    return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX,              //
+                                                        WeaponMesh,            //
+                                                        MazzleSocketName,      //
+                                                        FVector::ZeroVector,   //
+                                                        FRotator::ZeroRotator, //
+                                                        EAttachLocation::SnapToTarget, true);
 }

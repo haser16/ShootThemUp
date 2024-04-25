@@ -16,7 +16,7 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
     GENERATED_BODY()
 
-  public:
+public:
     ASTUBaseWeapon();
 
     FOnClipEmptySignature OnClipEmpty;
@@ -26,22 +26,18 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 
     void ChangeClip();
     bool CanReload() const;
+    bool IsAmmoEmpty() const;
 
-    FWeaponUIData GetUIData() const
-    {
-        return UIData;
-    }
+    FWeaponUIData GetUIData() const { return UIData; }
 
-    FAmmoData GetAmmoData()
-    {
-        return CurrentAmmo;
-    }
+    FAmmoData GetAmmoData() { return CurrentAmmo; }
 
     bool TryToAddAmmo(int32 ClipsAmount);
+    bool IsAmmoFull() const;
 
-  protected:
+protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    USkeletalMeshComponent *WeaponMesh;
+    USkeletalMeshComponent* WeaponMesh;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     FName MazzleSocketName = "MuzzleSocket";
@@ -56,27 +52,25 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
     FWeaponUIData UIData;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    UNiagaraSystem *MuzzleFX;
+    UNiagaraSystem* MuzzleFX;
 
     virtual void BeginPlay() override;
 
     void MakeShot();
-    APlayerController *GetPlayerController() const;
+    APlayerController* GetPlayerController() const;
 
-    bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
+    bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
     FVector GetMuzzleWorldLocation() const;
-    bool GetTraceData(FVector &TraceStart, FVector &TraceEnd) const;
-    void MakeHit(FHitResult &HitResult, FVector &TraceStart, FVector &TraceEnd) const;
+    bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
+    void MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd) const;
 
     void DecreaseAmmo();
-    bool IsAmmoEmpty() const;
     bool IsClipEmpty() const;
-    bool IsAmmoFull() const;
 
     void LogAmmo();
 
-    UNiagaraComponent *SpawnMuzzleFX();
+    UNiagaraComponent* SpawnMuzzleFX();
 
-  private:
+private:
     FAmmoData CurrentAmmo;
 };
