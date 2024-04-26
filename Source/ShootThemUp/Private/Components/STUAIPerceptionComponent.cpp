@@ -6,30 +6,30 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "STUUtils.h"
 
-AActor *USTUAIPerceptionComponent::GetClosestEnemy() const
+AActor* USTUAIPerceptionComponent::GetClosestEnemy() const
 {
-    TArray<AActor *> PerceiveActors;
+    TArray<AActor*> PerceiveActors;
     GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceiveActors);
 
-    if (PerceiveActors.Num() == 0)
-        return nullptr;
+    if (PerceiveActors.Num() == 0) return nullptr;
 
     const auto Controller = Cast<AAIController>(GetOwner());
-    if (!Controller)
-        return nullptr;
+    if (!Controller) return nullptr;
 
     const auto Pawn = Controller->GetPawn();
-    if (!Pawn)
-        return nullptr;
+    if (!Pawn) return nullptr;
 
     float BestDistance = MAX_FLT;
-    AActor *BestPawn = nullptr;
+    AActor* BestPawn = nullptr;
 
     for (const auto PerceiveActor : PerceiveActors)
     {
         const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PerceiveActor);
 
-        if (HealthComponent && !HealthComponent->IsDead()) // TODO: check if enemis or not
+        const auto PercievePawn = Cast<APawn>(PerceiveActor);
+        const bool AreEnemies = PercievePawn && STUUtils::AreEnemies(Controller, PercievePawn->Controller);
+
+        if (HealthComponent && !HealthComponent->IsDead() && AreEnemies)
         {
             const auto CurrentDistance = (PerceiveActor->GetActorLocation() - Pawn->GetActorLocation()).Size();
             if (CurrentDistance < BestDistance)
