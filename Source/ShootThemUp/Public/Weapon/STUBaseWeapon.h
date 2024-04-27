@@ -57,7 +57,6 @@ protected:
     virtual void BeginPlay() override;
 
     void MakeShot();
-    APlayerController* GetPlayerController() const;
 
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
     FVector GetMuzzleWorldLocation() const;

@@ -15,13 +15,13 @@ class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 {
     GENERATED_BODY()
 
-  public:
+public:
     ASTURifleWeapon();
 
     virtual void StartFire() override;
     virtual void StopFire() override;
 
-  protected:
+protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float TimeBetweenShots = 0.1f;
 
@@ -29,10 +29,10 @@ class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
     float DamageAmount = 10.0f;
 
     UPROPERTY(VisibleAnywhere, Category = "VFX")
-    USTUWeaponFXComponent *WeaponFXComponent;
+    USTUWeaponFXComponent* WeaponFXComponent;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-    UNiagaraSystem *TraceFX;
+    UNiagaraSystem* TraceFX;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FString TraceTargetName = "TraceTarget";
@@ -40,15 +40,17 @@ class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
     virtual void BeginPlay() override;
     virtual void MakeShot();
 
-  private:
+private:
     FTimerHandle ShotTimerHandle;
 
     UPROPERTY()
-    UNiagaraComponent *MuzzleFXComponent;
+    UNiagaraComponent* MuzzleFXComponent;
 
-    void MakeDamage(const FHitResult &HitResult);
+    void MakeDamage(const FHitResult& HitResult);
     void InitMuzzleFX();
     void SetMuzzleFXVisibility(bool Visible);
-    
-    void SpawnTraceFX(const FVector &TraceStart, const FVector &TraceEnd);
+
+    void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
+
+    AController* GetConlroller() const;
 };
