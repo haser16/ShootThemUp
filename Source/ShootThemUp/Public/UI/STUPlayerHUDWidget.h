@@ -38,4 +38,6 @@ class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
 
   private:
     void OnHealhChanged(float Health, float HealthDelta);
+
+    void OnNewPawn(APawn* NewPawn);
 };

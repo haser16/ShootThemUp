@@ -7,14 +7,23 @@
 
 bool USTUPlayerHUDWidget::Initialize()
 {
-    const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
-    if (HealthComponent)
+    if (GetOwningPlayer())
+    {
+        GetOwningPlayer()->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
+        OnNewPawn(GetOwningPlayerPawn());
+    }
+    return Super::Initialize();
+}
+
+void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn) 
+{
+    const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(NewPawn);
+    if (HealthComponent && !HealthComponent->OnHeathChanged.IsBoundToObject(this))
     {
         HealthComponent->OnHeathChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealhChanged);
     }
-
-    return Super::Initialize();
 }
+
 
 void USTUPlayerHUDWidget::OnHealhChanged(float Health, float HealthDelta)
 {
