@@ -15,15 +15,15 @@ class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
 {
     GENERATED_BODY()
 
-  public:
+public:
     UFUNCTION(BlueprintCallable, Category = "UI")
     float GetHealthPercent() const;
 
     UFUNCTION(BlueprintCallable, Category = "UI")
-    bool GetCurrentWeaponUIData(FWeaponUIData &UIData) const;
+    bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
 
     UFUNCTION(BlueprintCallable, Category = "UI")
-    bool GetCurrentWeaponAmmoData(FAmmoData &AmmoData) const;
+    bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool IsPlayerAlive() const;
@@ -34,9 +34,10 @@ class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
     UFUNCTION(BlueprintImplementableEvent, Category = "UI")
     void OnTakeDamage();
 
-    virtual bool Initialize() override;
+protected:
+    virtual void NativeOnInitialized() override;
 
-  private:
+private:
     void OnHealhChanged(float Health, float HealthDelta);
 
     void OnNewPawn(APawn* NewPawn);
