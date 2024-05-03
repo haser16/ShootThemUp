@@ -58,12 +58,13 @@ void USTUGameOverWidget::UpdatePlayersStat()
         PlayerStatRowWidget->SetDeath(STUUtils::TextFromInt(PlayerState->GetDeathNum()));
         PlayerStatRowWidget->SetTeam(STUUtils::TextFromInt(PlayerState->GetTeamId()));
         PlayerStatRowWidget->SetPlayerIndicatorVisibility(Controller->IsPlayerController());
+        PlayerStatRowWidget->SetTeamColor(PlayerState->GetTeamColor());
 
         PlayerStatBox->AddChild(PlayerStatRowWidget);
     }
 }
 
-void USTUGameOverWidget::OnResetLevel() 
+void USTUGameOverWidget::OnResetLevel()
 {
     // const FName CurrentLevelName = "TestLevel";
     const FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);

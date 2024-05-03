@@ -4,6 +4,8 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "STUUtils.h"
+#include "Components/ProgressBar.h"
+#include "Player/STUPlayerState.h"
 
 void USTUPlayerHUDWidget::NativeOnInitialized()
 {
@@ -16,47 +18,52 @@ void USTUPlayerHUDWidget::NativeOnInitialized()
     }
 }
 
-void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn) 
+void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
 {
     const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(NewPawn);
     if (HealthComponent && !HealthComponent->OnHeathChanged.IsBoundToObject(this))
     {
         HealthComponent->OnHeathChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealhChanged);
     }
-}
 
+    UpdateHealthBar();
+}
 
 void USTUPlayerHUDWidget::OnHealhChanged(float Health, float HealthDelta)
 {
     if (HealthDelta < 0.0f)
     {
         OnTakeDamage();
+
+        if (!IsAnimationPlaying(DamageAnimation))
+        {
+            PlayAnimation(DamageAnimation);
+        }
     }
+
+    UpdateHealthBar();
 }
 
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {
     const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
-    if (!HealthComponent)
-        return 0.0f;
+    if (!HealthComponent) return 0.0f;
 
     return HealthComponent->GetHealthPercent();
 }
 
-bool USTUPlayerHUDWidget::GetCurrentWeaponUIData(FWeaponUIData &UIData) const
+bool USTUPlayerHUDWidget::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
 {
     const auto WeaponComponent = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(GetOwningPlayerPawn());
-    if (!WeaponComponent)
-        return false;
+    if (!WeaponComponent) return false;
 
     return WeaponComponent->GetCurrentWeaponUIData(UIData);
 }
 
-bool USTUPlayerHUDWidget::GetCurrentWeaponAmmoData(FAmmoData &AmmoData) const
+bool USTUPlayerHUDWidget::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
 {
     const auto WeaponComponent = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(GetOwningPlayerPawn());
-    if (!WeaponComponent)
-        return false;
+    if (!WeaponComponent) return false;
 
     return WeaponComponent->GetCurrentWeaponAmmoData(AmmoData);
 }
@@ -71,4 +78,21 @@ bool USTUPlayerHUDWidget::IsPlayerSpectating() const
 {
     const auto Controller = GetOwningPlayer();
     return Controller && Controller->GetStateName() == NAME_Spectating;
+}
+
+int32 USTUPlayerHUDWidget::GetKillsNum() const
+{
+    const auto Controller = GetOwningPlayer();
+    if (!Controller) return 0;
+
+    const auto PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);
+    return PlayerState ? PlayerState->GetKillsNum() : 0;
+}
+
+void USTUPlayerHUDWidget::UpdateHealthBar()
+{
+    if (HealthProgressBar)
+    {
+        HealthProgressBar->SetFillColorAndOpacity(GetHealthPercent() > PercentColorThreshold ? GoodColor : BadColor);
+    }
 }
