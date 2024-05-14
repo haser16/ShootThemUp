@@ -12,7 +12,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 
-
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
@@ -23,7 +22,7 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
     HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
     WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
 }
- 
+
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
@@ -69,6 +68,7 @@ void ASTUBaseCharacter::OnDeath()
 
     GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
     WeaponComponent->StopFire();
+    WeaponComponent->Zoom(false);
 
     GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     GetMesh()->SetSimulatePhysics(true);
@@ -76,14 +76,11 @@ void ASTUBaseCharacter::OnDeath()
     UGameplayStatics::PlaySoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
 }
 
-void ASTUBaseCharacter::OnHealthChanged(float Health, float HealthDelta)
-{
-
-}
+void ASTUBaseCharacter::OnHealthChanged(float Health, float HealthDelta) {}
 
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 {
-    const auto FallVelocityZ = -GetVelocity().Z;
+    const auto FallVelocityZ = GetVelocity().Z;
     UE_LOG(BaseCharacterLog, Display, TEXT("On Landed %f"), FallVelocityZ);
 
     if (FallVelocityZ < LandedDamageVelocity.X) return;
@@ -98,4 +95,18 @@ void ASTUBaseCharacter::SetPlayerColor(const FLinearColor& Color)
     if (!MaterialInst) return;
 
     MaterialInst->SetVectorParameterValue(MaterialColorName, Color);
+}
+
+void ASTUBaseCharacter::TurnOff()
+{
+    WeaponComponent->StopFire();
+    WeaponComponent->Zoom(false);
+    Super::TurnOff();
+}
+
+void ASTUBaseCharacter::Reset()
+{
+    WeaponComponent->StopFire();
+    WeaponComponent->Zoom(false);
+    Super::Reset();
 }

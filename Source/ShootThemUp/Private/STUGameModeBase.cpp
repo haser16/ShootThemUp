@@ -9,6 +9,7 @@
 #include "STUUtils.h"
 #include "Components/STURespawnComponent.h"
 #include "EngineUtils.h"
+#include "Components/STUWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUGameModeBase, All, All);
 
@@ -217,7 +218,7 @@ void ASTUGameModeBase::GameOver()
 void ASTUGameModeBase::SetMatchState(ESTUMatchState State)
 {
     if (MatchState == State) return;
-    
+
     MatchState = State;
     OnMatchStateChanged.Broadcast(MatchState);
 }
@@ -228,6 +229,7 @@ bool ASTUGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDel
 
     if (PauseSet)
     {
+        StopAllFire();
         SetMatchState(ESTUMatchState::Pause);
     }
     return PauseSet;
@@ -242,4 +244,16 @@ bool ASTUGameModeBase::ClearPause()
         SetMatchState(ESTUMatchState::InProgress);
     }
     return PauseCleared;
+}
+
+void ASTUGameModeBase::StopAllFire()
+{
+    for (auto Pawn : TActorRange<APawn>(GetWorld()))
+    {
+        const auto WeaponComponent = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Pawn);
+        if (!WeaponComponent) return;
+
+        WeaponComponent->StopFire();
+        WeaponComponent->Zoom(false);
+    }
 }

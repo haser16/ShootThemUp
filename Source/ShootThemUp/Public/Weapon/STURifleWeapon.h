@@ -38,8 +38,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     FString TraceTargetName = "TraceTarget";
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    float FOVZoomAngle = 50.0f;
+
     virtual void BeginPlay() override;
     virtual void MakeShot();
+    virtual void Zoom(bool Enabled) override;
 
 private:
     FTimerHandle ShotTimerHandle;
@@ -57,4 +61,6 @@ private:
     void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
 
     AController* GetConlroller() const;
+
+    float DefaultCameraFOV = 90.0f;
 };

@@ -21,7 +21,7 @@ public:
 
     virtual void StartPlay();
     virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
-   
+
     void Killed(AController* KillerController, AController* VictimController);
     void RespawnRequest(AController* Controller);
 
@@ -31,7 +31,6 @@ public:
 
     virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
     virtual bool ClearPause() override;
-
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -67,4 +66,6 @@ private:
     void GameOver();
 
     void SetMatchState(ESTUMatchState State);
+
+    void StopAllFire();
 };

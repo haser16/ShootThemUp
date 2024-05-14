@@ -27,14 +27,15 @@ public:
 
     void ChangeClip();
     bool CanReload() const;
-    bool IsAmmoEmpty() const;
 
     FWeaponUIData GetUIData() const { return UIData; }
-
     FAmmoData GetAmmoData() { return CurrentAmmo; }
 
     bool TryToAddAmmo(int32 ClipsAmount);
+    bool IsAmmoEmpty() const;
     bool IsAmmoFull() const;
+
+    virtual void Zoom(bool Enabled){};
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
